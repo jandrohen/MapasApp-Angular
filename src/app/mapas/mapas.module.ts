@@ -7,6 +7,7 @@ import { FullScreenComponent } from './pages/full-screen/full-screen.component';
 import { MarcadoresComponent } from './pages/marcadores/marcadores.component';
 import { ZoomRangeComponent } from './pages/zoom-range/zoom-range.component';
 import { PropiedadesComponent } from './pages/propiedades/propiedades.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -17,9 +18,10 @@ import { PropiedadesComponent } from './pages/propiedades/propiedades.component'
     ZoomRangeComponent,
     PropiedadesComponent
   ],
-  imports: [
-    CommonModule,
-    MapasRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        MapasRoutingModule,
+        ReactiveFormsModule
+    ]
 })
 export class MapasModule { }
