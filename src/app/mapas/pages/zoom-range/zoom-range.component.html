@@ -4,7 +4,7 @@
 
   <div class="col-12">
     <label class="form-label">
-      zoom: 16
+      zoom: {{ zoomLevel | number: '2.0-2' }}
       - Lng,Lat: [123,456]
     </label>
     <input type="range" class="form-range">
