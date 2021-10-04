@@ -3,7 +3,8 @@ import * as mapboxgl from "mapbox-gl";
 
 interface MarcadorColor {
   color: string;
-  marker: mapboxgl.Marker;
+  marker?: mapboxgl.Marker;
+  center?: [number, number]
 }
 
 @Component({
@@ -40,12 +41,15 @@ export class MarcadoresComponent implements AfterViewInit {
   //Usamos el ngAfterViewInit porque la referencia que cogemos del DOM con el ViewChild
   //no se llega a cargar en el ngOnInit por lo tanto nos dara undefined este elemento
   ngAfterViewInit(): void {
+
     this.mapa = new mapboxgl.Map({
       container: this.divMapa.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: this.center,
       zoom: this.zoomLevel
     });
+
+    this.leerLocalStorage();
 
     // Marcardor personalizado que funciona insertándolo en una de las propiedades del Marker//
     // const markerHtml: HTMLElement = document.createElement('div');
@@ -70,6 +74,8 @@ export class MarcadoresComponent implements AfterViewInit {
       color,
       marker: nuevoMarcador
     } );
+
+    this.guardarMarcadoresLocalStorage();
   }
 
   irMarcador(marker: mapboxgl.Marker){
@@ -79,10 +85,44 @@ export class MarcadoresComponent implements AfterViewInit {
   }
 
   guardarMarcadoresLocalStorage(){
+    const lngLatArr: MarcadorColor[] = [];
+
+    this.marcadores.forEach( m => {
+
+      const color = m.color
+      const { lng , lat } = m.marker!.getLngLat();
+
+      lngLatArr.push({
+        color: m.color,
+        center: [ lng, lat ]
+      });
+    })
+
+    localStorage.setItem('marcadores', JSON.stringify(lngLatArr));
 
   }
 
   leerLocalStorage(){
 
+    if ( !localStorage.getItem('marcadores')){
+      return;
+    }
+
+    const lngLatArr: MarcadorColor[] = JSON.parse( localStorage.getItem('marcadores')! );
+
+   lngLatArr.forEach( m => {
+
+     const newMarker =  new mapboxgl.Marker( {
+       color: m.color,
+       draggable: true
+     })
+       .setLngLat( m.center! )
+       .addTo( this.mapa );
+
+     this.marcadores.push({
+       marker: newMarker,
+       color: m.color
+     });
+   })
   }
 }
