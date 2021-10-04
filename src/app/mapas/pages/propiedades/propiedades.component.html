@@ -17,14 +17,16 @@
            *ngFor="let propiedad of propiedades">
 
         <div class="card">
-          <img src="..." class="card-image-top">
+          <app-mini-mapa [lngLat]="propiedad.lngLat" class="card-img-top"></app-mini-mapa>
           <div class="card-body">
             <h5 class="card-title"> {{propiedad.titulo}} </h5>
             <p class="card-text">{{propiedad.descripcion}}</p>
           </div>
-
         </div>
+
       </div>
+
     </div>
+
   </div>
 </div>
